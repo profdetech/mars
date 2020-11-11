@@ -3,7 +3,9 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, ot
         game.over(true)
     }
     if (projectile.overlapsWith(non_mars)) {
-        game.over(false)
+        info.changeLifeBy(-1)
+        game.splash("perdu vie -1")
+        partie()
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -47,15 +49,43 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             `, terre, Math.map(angle, 0, 180, 20, -20), Math.map(angle, 90, 180, -20, 0))
     }
 })
-let projectile: Sprite = null
+info.onLifeZero(function () {
+    game.over(false)
+})
+function partie () {
+    terre.setPosition(randint(10, 160), 108)
+    mars.setPosition(randint(10, 150), 10)
+    game.splash("Donner l'angle de la fusée pour aller de la terre sur mars")
+    angle = game.askForNumber("")
+}
 let angle = 0
-let mars: Sprite = null
+let projectile: Sprite = null
 let terre: Sprite = null
+let mars: Sprite = null
 let non_mars: Sprite = null
+info.setLife(3)
 non_mars = sprites.create(img`
     f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f 
     `, SpriteKind.Player)
 non_mars.setPosition(0, 0)
+mars = sprites.create(img`
+    . . . . . 2 2 2 2 2 2 2 . . . . 
+    . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+    . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
+    . . . . . 2 2 2 2 2 2 2 . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
 terre = sprites.create(img`
     ................................
     ................................
@@ -90,25 +120,4 @@ terre = sprites.create(img`
     ................................
     ................................
     `, SpriteKind.Player)
-terre.setPosition(randint(10, 160), 108)
-mars = sprites.create(img`
-    . . . . . 2 2 2 2 2 2 2 . . . . 
-    . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
-    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-    . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
-    . . . . . 2 2 2 2 2 2 2 . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.Player)
-mars.setPosition(randint(10, 150), 10)
-game.splash("Donner l'angle de la fusée pour aller de la terre sur mars")
-angle = game.askForNumber("")
+partie()
